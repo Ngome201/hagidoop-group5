@@ -12,7 +12,12 @@ public class ServerSocket {
     private java.net.ServerSocket serverSocket;
     private InputStream inputStream;
     private OutputStream outputStream;
-    private Set <Socket> clients = new HashSet<>();
+    public static Set <Socket> clients = new HashSet<>();
+
+    public ServerSocket() throws IOException {
+
+        initiateSocket();
+    }
 
     void initiateSocket() throws IOException {
         serverSocket = new java.net.ServerSocket(2456);
@@ -25,6 +30,15 @@ public class ServerSocket {
             System.out.println("client address : "+client.getInetAddress());
             System.out.println("client port : "+client.getPort());
         }
+    }
+    void sendData(Socket client, String data) throws Exception {
+        outputStream = client.getOutputStream();
+        byte [] byteData = data.getBytes();
+        outputStream.write(byteData);
+        outputStream.flush();
+
+
+
     }
     SocketAddress getAddress(){
         return serverSocket.getLocalSocketAddress();
