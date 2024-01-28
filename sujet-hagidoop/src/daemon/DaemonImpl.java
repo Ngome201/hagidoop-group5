@@ -15,7 +15,20 @@ public class DaemonImpl extends UnicastRemoteObject implements Daemon {
 
     @Override
     public void runMap(Map m, Format reader, Format writer, CallBack cb) throws RemoteException {
-        m.map(reader, writer);
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                m.map(reader, writer);
+            }
+        };
+        Thread thread = new Thread(runnable);
+        thread.setDaemon(true);
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         cb.completed();
     }
 }

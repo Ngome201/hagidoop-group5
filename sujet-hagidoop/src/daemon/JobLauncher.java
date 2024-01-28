@@ -4,14 +4,19 @@ import application.MyMapReduce;
 import formats.Format;
 import formats.KVFormat;
 import formats.TxtFormat;
+import hdfs.ConfigurationFileReader;
 import hdfs.HdfsClient;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.lang.invoke.StringConcatFactory;
 import java.net.Socket;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
 import static hdfs.ServerSocket.clients;
@@ -26,23 +31,25 @@ public class JobLauncher {
         try {
             runMapTaskParallel(myMapReduce, reader, writer, cb);
             countDownLatch.await();
-        } catch (RemoteException | InterruptedException e) {
+        } catch (InterruptedException | IOException e) {
             throw new RuntimeException(e);
         }
         HdfsClient.HdfsRead(fname);
         myMapReduce.reduce(reader, writer);
     }
 
-    private static void runMapTaskParallel(MyMapReduce myMapReduce, Format reader, Format writer, CallBack cb) throws RemoteException {
+    private static void runMapTaskParallel(MyMapReduce myMapReduce, Format reader, Format writer, CallBack cb) throws IOException {
         CallBack callBackStub = (CallBack) UnicastRemoteObject.exportObject(cb,0);
-        Registry registry = LocateRegistry.getRegistry("<daemon-host>", 1099);
-        for (Socket i : clients) {
+        for (Socket machine : clients) {
             try {
-                Daemon daemon = (Daemon) registry.lookup("Datanode");
-                daemon.runMap(myMapReduce,reader,writer,callBackStub);
+                Registry registry = LocateRegistry.getRegistry(String.valueOf(machine.getInetAddress()), 2456);
+                Daemon daemon = (Daemon) registry.lookup("DemonImpl");
+                Daemon daemonStub = (Daemon) UnicastRemoteObject.exportObject(daemon, 0);
+                daemonStub.runMap(myMapReduce, reader, writer, callBackStub);
             } catch (NotBoundException e) {
                 throw new RuntimeException(e);
             }
+
         }
     }
 }
