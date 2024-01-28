@@ -1,0 +1,20 @@
+
+
+on peut tester :
+
+- en lancant le deploiement
+  on lance script/deploy.bash (il faut pouvoir faire du ssh sans question / passwd)
+  Ca lance à la fois hdfs et le daemon RMI.
+  ou a la main, dans bin (plus facile pour debugger):
+    java daemon.DaemonImpl 4000 4001
+    java daemon.DaemonImpl 5000 5001
+  
+  
+- en copiant le fichier d'exemple dans HDFS (filesample.txt qui est dans le répertoire data)
+  dans bin : java hdfs.HdfsClient write txt filesample.txt
+  (ou bien la même chose depuis eclipse)
+  
+- en lançant le map-reduce
+   dans bin : java application.MyMapReduce filesample.txt
+   (ou bien la même chose depuis eclipse)
+	

@@ -1,0 +1,6 @@
+
+dans bin:
+java formats.TestFormat
+
+prend le fichier data/filesaple.txt, le lit est génère filesample-kv.txt
+puis relit ce fichier et génère filesample2.txt

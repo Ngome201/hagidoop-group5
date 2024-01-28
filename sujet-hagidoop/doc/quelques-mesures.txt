@@ -1,0 +1,29 @@
+
+
+Count : programme itératif
+
+java application.Count ../data/bigsample-16Mo.txt 
+time in ms =486
+java application.Count ../data/bigsample-110Mo.txt 
+time in ms =2515
+java application.Count ../data/bigsample-540Mo.txt 
+time in ms =12330
+java application.Count ../data/bigsample-1Go.txt 
+time in ms =24040
+
+
+MyMapReduce en centralisé (mais plusieurs core)
+
+
+java application.MyMapReduce bigsample-16Mo.txt
+time in ms =330  (faut avoir chauffeé, premiere mesure grande)
+
+java application.MyMapReduce bigsample-110Mo.txt
+time in ms =1500
+
+java application.MyMapReduce bigsample-540Mo.txt
+time in ms =7564
+
+java application.MyMapReduce bigsample-1Go.txt 
+time in ms =13962
+
