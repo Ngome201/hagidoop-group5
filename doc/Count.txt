@@ -1,0 +1,5 @@
+
+dans bin:
+java application.Count ../data/filesample.txt
+
+mesure le temps de comptage des mots en itératif

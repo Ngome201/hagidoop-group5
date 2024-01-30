@@ -1,0 +1,18 @@
+
+
+on peut tester :
+
+- en lancant dans bin
+	- java hdfs.HdfsServer 4001 (les ports définis pour hdfs dans config/nodes)
+	- java hdfs.HdfsServer 5001
+	- java hdfs.HdfsClient write txt filesample.txt
+		le client partitionne filesample.txt et envoie les fragments aux 2 serveurs Hdfs
+	- java hdfs.HdfsClient delete filesample.txt
+		le client détruit les fragments sur les 2 serveurs
+  Ce mode est util pour avoir des traces à la console (pour debugger).
+  
+- en utilisant script scripts/deploy.bash
+	- ce script déploie les daemons (qui lancent les HdfsServer)
+	- on lance le client de la même façon qu'avant
+	
+	
